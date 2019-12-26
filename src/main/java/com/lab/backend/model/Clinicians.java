@@ -1,8 +1,10 @@
 package com.lab.backend.model;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+@Entity
 public class Clinicians {
     private String firstName;
     private String lastName;

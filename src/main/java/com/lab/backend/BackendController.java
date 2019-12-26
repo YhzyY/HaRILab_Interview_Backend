@@ -3,27 +3,27 @@ package com.lab.backend;
 import com.lab.backend.dao.ParticipantsRepository;
 import com.lab.backend.model.Participants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@ImportResource("classpath:applicationContext.xml")
+//@ImportResource("classpath:applicationContext.xml")
 public class BackendController {
 
     @Autowired
     ParticipantsRepository participantsRepository;
+//    @Autowired
+//    CliniciansRepository cliniciansRepository;
+//    @Autowired
+//    AttacksRepository attacksRepository;
+
 
 //    private ParticipantsRepository participantsRepository;
 //    @Autowired
 //    public void setDependency(ParticipantsRepository participantsRepository){
 //        this.participantsRepository = participantsRepository;
 //    }
-//    @Autowired
-//    CliniciansRepository cliniciansRepository;
-//    @Autowired
-//    AttacksRepository attacksRepository;
 
 
     @GetMapping("/greeting")
@@ -43,9 +43,16 @@ public class BackendController {
         return null;
     }
 
+    @PostMapping("/newUser")
+    public String create(@RequestParam String firstName, String lastName, Integer uuid){
+        participantsRepository.save(new Participants(firstName, lastName, uuid));
+        return "newUser is added";
+    }
+
 //    @PostMapping("/newUser")
-//    public Employee createEmployee(@Valid @RequestBody Employee employee) {
-//        return employeeRepository.save(employee);
+//    public String create(@RequestBody Participants participants){
+//        participantsRepository.save(new Participants(participants.getFirstName(), participants.getLastName(), participants.getUuid()));
+//        return "newUser is added";
 //    }
 
 }
