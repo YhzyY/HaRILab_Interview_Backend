@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="
+                http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">
+
+<jpa:repositories base-package="com.lab.backend.dao" />
+
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName">
+            <value>org.postgresql.Driver</value>
+        </property>
+<!--        <property name="driverClassName" value="${database.driverClassName}" />-->
+        <property name="url" value="#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }"/>
+        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+    </bean>
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="persistenceUnitName" value="jpaData" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <bean class="java.net.URI" id="dbUrl">
+        <constructor-arg value="${DATABASE_URL}"/>
+    </bean>
+</beans>
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--    <beans xmlns="http://www.springframework.org/schema/beans"-->
+<!--           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+<!--           xmlns:jpa="http://www.springframework.org/schema/data/jpa"-->
+<!--           xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd-->
+<!--            http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.0.xsd">-->
+<!--    <jpa:repositories base-package="com.lab.backend.dao" />-->
+<!--&lt;!&ndash;    <bean id="participants"&ndash;&gt;-->
+<!--&lt;!&ndash;          class="org.springframework.samples.jpetstore.dao.jpa.JpaAccountDao">&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; additional collaborators and configuration for this bean go here &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    <bean id="itemDao" class="org.springframework.samples.jpetstore.dao.jpa.JpaItemDao">&ndash;&gt;-->
+<!--&lt;!&ndash;        &lt;!&ndash; additional collaborators and configuration for this bean go here &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;    </bean>&ndash;&gt;-->
+
+<!--&lt;!&ndash;    &lt;!&ndash; more bean definitions for data access objects go here &ndash;&gt;&ndash;&gt;-->
+
+<!--</beans>-->
