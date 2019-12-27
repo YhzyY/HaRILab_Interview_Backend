@@ -4,10 +4,14 @@ package com.lab.backend.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 public class Attacks {
-    private String attackTime;
+    private LocalDate attackDate;
+    private LocalTime attackTime;
+
     private String attackLocation;
     private Integer uuid;
 
@@ -23,7 +27,15 @@ public class Attacks {
         this.id = id;
     }
 
-    public String getAttackTime() {
+    public LocalDate getAttackDate() {
+        return attackDate;
+    }
+
+    public void setAttackDate() {
+        this.attackDate = attackDate;
+    }
+
+    public LocalTime getAttackTime() {
         return attackTime;
     }
 
@@ -50,7 +62,8 @@ public class Attacks {
     public Attacks(){
     }
 
-    public Attacks(String attackTime, String attackLocation, Integer uuid) {
+    public Attacks(LocalDate attackDate, LocalTime attackTime, String attackLocation, Integer uuid) {
+        this.attackDate = attackDate;
         this.attackTime = attackTime;
         this.attackLocation = attackLocation;
         this.uuid = uuid;
@@ -58,6 +71,6 @@ public class Attacks {
 
     @Override
     public String toString() {
-        return "Attack: [id=" + id + ", uuid="+ uuid + ", attackTime =" + attackTime +" , attackLocation = " + attackLocation + "]";
+        return "Attack: [id=" + id + ", uuid="+ uuid + ", attackData =" + attackDate + ", attackTime =" + attackTime +" , attackLocation = " + attackLocation + "]";
     }
 }

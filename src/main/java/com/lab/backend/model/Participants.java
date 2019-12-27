@@ -27,17 +27,17 @@ public class Participants {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return firstName + " " + lastName;
     }
 
     public void setFirstName() {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
+//    public String getLastName() {
+//        return lastName;
+//    }
 
     public void setLastName() {
         this.lastName = lastName;
