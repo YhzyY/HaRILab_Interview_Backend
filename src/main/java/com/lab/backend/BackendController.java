@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 @RestController
 //@ImportResource("classpath:applicationContext.xml")
@@ -50,9 +51,15 @@ public class BackendController {
     }
 
     @PostMapping("/newUser")
-    public String createParticipant(@RequestParam String firstName, String lastName, Integer uuid){
-        participantsRepository.save(new Participants(firstName, lastName, uuid));
-        return "newUser is added";
+    public String createParticipant(@RequestParam String name, Integer uuid){
+        if(participantsRepository.findByName(name) != null)
+            return "failed: userName exists";
+        else if(participantsRepository.findByUuid(uuid) != null)
+            return "already registered";
+        else {
+            participantsRepository.save(new Participants(name, uuid));
+            return "newUser is added";
+        }
     }
 
 //    @PostMapping("/newUser")
@@ -108,14 +115,28 @@ public class BackendController {
         return attacksRepository.findByAttackDateAndAttackTimeAndAttackLocationAndUuid(attackDate, attackTime, attackLocation, uuid).getId();
     }
 
+    @PutMapping("/modifyAttack")
+    public String modifyAttack(@RequestParam LocalDate attackDate, LocalTime attackTime, String attackLocation, Integer id){
+        Attacks attack = attacksRepository.findById(id).get();
+        attack.setAttackDate(attackDate);
+        attack.setAttackTime(attackTime);
+        attack.setAttackLocation(attackLocation);
+        attacksRepository.save(attack);
+        return "attack modified";
+    }
+
 
 
 
 
     @PostMapping("/newClinician")
-    public String createClinician(@RequestParam String firstName, String lastName, Integer password){
-        cliniciansRepository.save(new Clinicians(firstName, lastName, password));
-        return "newClinician is added";
+    public String createClinician(@RequestParam String userName, Integer password){
+        if(cliniciansRepository.findByUserName(userName) != null)
+            return "failed: userName exists";
+        else{
+            cliniciansRepository.save(new Clinicians(userName, password));
+            return "newClinician is added";
+        }
     }
 
     @GetMapping("/clinicians")
@@ -130,8 +151,8 @@ public class BackendController {
     }
 
     @GetMapping("/ClinicianLogin")
-    public String ClinicianLogin(@RequestParam String firstName, String lastName, Integer password) {
-        return cliniciansRepository.findByFirstNameAndLastNameAndPassword(firstName, lastName, password).getFirstName();
+    public String ClinicianLogin(@RequestParam String userName, Integer password) {
+        return cliniciansRepository.findByUserNameAndPassword(userName, password).getUserName();
     }
 
 }

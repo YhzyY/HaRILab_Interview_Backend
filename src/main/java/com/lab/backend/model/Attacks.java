@@ -11,7 +11,6 @@ import java.time.LocalTime;
 public class Attacks {
     private LocalDate attackDate;
     private LocalTime attackTime;
-
     private String attackLocation;
     private Integer uuid;
 
@@ -31,7 +30,7 @@ public class Attacks {
         return attackDate;
     }
 
-    public void setAttackDate() {
+    public void setAttackDate(LocalDate attackDate) {
         this.attackDate = attackDate;
     }
 
@@ -39,7 +38,7 @@ public class Attacks {
         return attackTime;
     }
 
-    public void setAttackTime() {
+    public void setAttackTime(LocalTime attackTime) {
         this.attackTime = attackTime;
     }
 
@@ -47,7 +46,7 @@ public class Attacks {
         return attackLocation;
     }
 
-    public void setAttackLocation() {
+    public void setAttackLocation(String attackLocation) {
         this.attackLocation = attackLocation;
     }
 
@@ -55,7 +54,7 @@ public class Attacks {
         return uuid;
     }
 
-    public void setuuid() {
+    public void setuuid(Integer uuid) {
         this.uuid = uuid;
     }
 

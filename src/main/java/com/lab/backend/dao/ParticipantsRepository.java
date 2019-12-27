@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface ParticipantsRepository extends CrudRepository<Participants, Integer> {
     public Optional<Participants> findById(Integer id);
-
+    public Participants findByName(String name);
     public Participants findByUuid(Integer uuid);
 //    public Optional<Participants> findByLastName(String lastName);
 //    public Optional<Participants> findByFirstName(String firstName);

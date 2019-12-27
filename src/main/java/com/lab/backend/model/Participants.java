@@ -6,11 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 public class Participants {
-    private String firstName;
-    private String lastName;
+    private String name;
     private Integer uuid;
 
     @Id
@@ -28,40 +28,31 @@ public class Participants {
     }
 
     public String getName() {
-        return firstName + " " + lastName;
+        return name;
     }
 
-    public void setFirstName() {
-        this.firstName = firstName;
-    }
-
-//    public String getLastName() {
-//        return lastName;
-//    }
-
-    public void setLastName() {
-        this.lastName = lastName;
+    public void setUserName(String userName) {
+        this.name = name;
     }
 
     public Integer getUuid() {
         return uuid;
     }
 
-    public void setUuid() {
+    public void setUuid(Integer uuid) {
         this.uuid = uuid;
     }
 
     public Participants(){
     }
 
-    public Participants(String firstName, String lastName, Integer uuid) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Participants(String name, Integer uuid) {
+        this.name = name;
         this.uuid = uuid;
     }
 
     @Override
     public String toString() {
-        return "Participant: [id=" + id + ", name =" + firstName + " " + lastName + ", uuid="+ uuid + "]";
+        return "Participant: [id=" + id + ", name =" + name + ", uuid="+ uuid + "]";
     }
 }

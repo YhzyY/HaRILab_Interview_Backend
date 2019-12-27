@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CliniciansRepository extends CrudRepository<Clinicians, Integer>{
-    public Clinicians findByFirstNameAndLastNameAndPassword(String firstName, String lastName, Integer password);
+    public Clinicians findByUserName(String userName);
+    public Clinicians findByUserNameAndPassword(String userName, Integer password);
 }

@@ -6,8 +6,7 @@ import javax.persistence.Id;
 
 @Entity
 public class Clinicians {
-    private String firstName;
-    private String lastName;
+    private String userName;
     private Integer password;
 
     @Id
@@ -23,41 +22,32 @@ public class Clinicians {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setFirstName() {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName() {
-        this.lastName = lastName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public Integer getPassword() {
         return password;
     }
 
-    public void setPassword() {
+    public void setPassword(Integer password) {
         this.password = password;
     }
 
     public Clinicians(){
     }
 
-    public Clinicians(String firstName, String lastName, Integer password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Clinicians(String userName, Integer password) {
+        this.userName = userName;
         this.password = password;
     }
 
     @Override
     public String toString() {
-        return "Clinician: [id=" + id + ", name =" + firstName + " " + lastName + ", password="+ password + "]";
+        return "Clinician: [id=" + id + ", userName =" + userName + ", password="+ password + "]";
     }
 }
