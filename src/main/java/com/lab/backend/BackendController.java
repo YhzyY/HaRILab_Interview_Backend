@@ -6,13 +6,18 @@ import com.lab.backend.dao.ParticipantsRepository;
 import com.lab.backend.model.Attacks;
 import com.lab.backend.model.Clinicians;
 import com.lab.backend.model.Participants;
+import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @RestController
 //@ImportResource("classpath:applicationContext.xml")
@@ -62,12 +67,6 @@ public class BackendController {
         }
     }
 
-//    @PostMapping("/newUser")
-//    public String create(@RequestBody Participants participants){
-//        participantsRepository.save(new Participants(participants.getFirstName(), participants.getLastName(), participants.getUuid()));
-//        return "newUser is added";
-//    }
-
     @GetMapping("/participantName")
     public String getParticipantName(@RequestParam Integer uuid) {
         return participantsRepository.findByUuid(uuid).getName();
@@ -94,14 +93,8 @@ public class BackendController {
     }
 
     @GetMapping("/todayAttacks")
-    public Iterable<Attacks> showTodayAttacks(@RequestParam LocalDate today){
-        try{
-            return attacksRepository.findByAttackDate(today);
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println("get attacks error");
-        }
-        return null;
+    public Iterable<Attacks> showTodayAttacks(@RequestParam LocalDate today, Integer uuid){
+        return attacksRepository.findByAttackDateAndUuid(today, uuid);
     }
 
     @DeleteMapping("/deleteAttack")
@@ -123,6 +116,50 @@ public class BackendController {
         attack.setAttackLocation(attackLocation);
         attacksRepository.save(attack);
         return "attack modified";
+    }
+
+//    tutorial: https://www.baeldung.com/spring-data-jpa-pagination-sorting
+    @GetMapping("/userAttacks")
+    public List<Attacks> showUserAttacks(@RequestParam Integer uuid){
+        return attacksRepository.findByUuid(uuid, Sort.by("attackDate").descending().and(Sort.by("attackTime")));
+    }
+
+    @GetMapping("/attacksReport")
+    public List<Integer> showAttacksReport(@RequestParam LocalDate day, Integer uuid){
+        List numList = new ArrayList();
+        LocalDate date;
+        for(int i = 0; i < 7; i++){
+            date = day.minusDays(i);
+            numList.add(0, IterableUtils.size(attacksRepository.findByAttackDateAndUuid(date, uuid)));
+        }
+        return numList;
+    }
+
+    @GetMapping("/PatientList")
+    public List getPatientList(){
+        List finalList = new ArrayList();
+        List tempList = new ArrayList();
+        Attacks lastAttack;
+        Integer tempUuid;
+        LocalDate tempDate;
+        LocalDate thisDay = LocalDate.now();
+        Iterable<Participants> allParticipants = participantsRepository.findAll();
+        for (Participants p : allParticipants){
+            tempList.add(p.getName());
+            tempUuid = p.getUuid();
+            lastAttack = attacksRepository.findByUuid(tempUuid, Sort.by("attackDate").descending().and(Sort.by("attackTime"))).get(0);
+            tempDate = lastAttack.getAttackDate();
+            if (tempDate.isBefore(thisDay.minusDays(2))){
+                tempList.add("alert");
+            }else{
+                tempList.add("none");
+            }
+            tempList.add(lastAttack.getAttackDate());
+            tempList.add(lastAttack.getAttackTime());
+            finalList.add(tempList);
+            tempList.clear();
+        }
+        return finalList;
     }
 
 
