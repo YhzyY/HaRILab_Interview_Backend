@@ -56,7 +56,7 @@ public class BackendController {
     }
 
     @PostMapping("/newUser")
-    public String createParticipant(@RequestParam String name, Integer uuid){
+    public String createParticipant(@RequestParam String name, String uuid){
         if(participantsRepository.findByName(name) != null)
             return "failed: userName exists";
         else if(participantsRepository.findByUuid(uuid) != null)
@@ -68,7 +68,7 @@ public class BackendController {
     }
 
     @GetMapping("/participantName")
-    public String getParticipantName(@RequestParam Integer uuid) {
+    public String getParticipantName(@RequestParam String uuid) {
         return participantsRepository.findByUuid(uuid).getName();
     }
 
@@ -76,7 +76,7 @@ public class BackendController {
 
 
     @PostMapping("/newAttack")
-    public String createAttack(@RequestParam LocalDate attackDate, LocalTime attackTime, String attackLocation, Integer uuid){
+    public String createAttack(@RequestParam LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid){
         attacksRepository.save(new Attacks(attackDate, attackTime, attackLocation, uuid));
         return "new attack is added";
     }
@@ -93,7 +93,7 @@ public class BackendController {
     }
 
     @GetMapping("/todayAttacks")
-    public Iterable<Attacks> showTodayAttacks(@RequestParam LocalDate today, Integer uuid){
+    public Iterable<Attacks> showTodayAttacks(@RequestParam LocalDate today, String uuid){
         return attacksRepository.findByAttackDateAndUuid(today, uuid);
     }
 
@@ -104,7 +104,7 @@ public class BackendController {
     }
 
     @GetMapping("/attackId")
-    public Integer getAttackId(@RequestParam LocalDate attackDate, LocalTime attackTime, String attackLocation, Integer uuid){
+    public Integer getAttackId(@RequestParam LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid){
         return attacksRepository.findByAttackDateAndAttackTimeAndAttackLocationAndUuid(attackDate, attackTime, attackLocation, uuid).getId();
     }
 
@@ -120,12 +120,12 @@ public class BackendController {
 
 //    tutorial: https://www.baeldung.com/spring-data-jpa-pagination-sorting
     @GetMapping("/userAttacks")
-    public List<Attacks> showUserAttacks(@RequestParam Integer uuid){
+    public List<Attacks> showUserAttacks(@RequestParam String uuid){
         return attacksRepository.findByUuid(uuid, Sort.by("attackDate").descending().and(Sort.by("attackTime")));
     }
 
     @GetMapping("/attacksReport")
-    public List<Integer> showAttacksReport(@RequestParam LocalDate day, Integer uuid){
+    public List<Integer> showAttacksReport(@RequestParam LocalDate day, String uuid){
         List numList = new ArrayList();
         LocalDate date;
         for(int i = 0; i < 7; i++){
@@ -140,7 +140,7 @@ public class BackendController {
         List finalList = new ArrayList();
         List tempList = new ArrayList();
         Attacks lastAttack;
-        Integer tempUuid;
+        String tempUuid;
         LocalDate tempDate;
         LocalDate thisDay = LocalDate.now();
         Iterable<Participants> allParticipants = participantsRepository.findAll();

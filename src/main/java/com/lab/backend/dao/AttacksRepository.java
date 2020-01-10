@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface AttacksRepository extends CrudRepository<Attacks, Integer>, PagingAndSortingRepository<Attacks, Integer> {
     public Optional<Attacks> findById(Integer id);
-    public List<Attacks> findByUuid(Integer uuid, Sort and);
-    public Iterable<Attacks> findByAttackDateAndUuid(LocalDate attackDate, Integer uuid);
-    public Attacks findByAttackDateAndAttackTimeAndAttackLocationAndUuid(LocalDate attackDate, LocalTime attackTime, String attackLocation, Integer uuid);
+    public List<Attacks> findByUuid(String uuid, Sort and);
+    public Iterable<Attacks> findByAttackDateAndUuid(LocalDate attackDate, String uuid);
+    public Attacks findByAttackDateAndAttackTimeAndAttackLocationAndUuid(LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid);
 }

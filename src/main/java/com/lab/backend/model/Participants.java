@@ -11,7 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Entity
 public class Participants {
     private String name;
-    private Integer uuid;
+    private String uuid;
 
     @Id
     @GeneratedValue
@@ -35,18 +35,18 @@ public class Participants {
         this.name = name;
     }
 
-    public Integer getUuid() {
+    public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(Integer uuid) {
+    public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 
     public Participants(){
     }
 
-    public Participants(String name, Integer uuid) {
+    public Participants(String name, String uuid) {
         this.name = name;
         this.uuid = uuid;
     }

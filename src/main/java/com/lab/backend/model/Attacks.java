@@ -12,7 +12,7 @@ public class Attacks {
     private LocalDate attackDate;
     private LocalTime attackTime;
     private String attackLocation;
-    private Integer uuid;
+    private String uuid;
 
     @Id
     @GeneratedValue
@@ -50,18 +50,18 @@ public class Attacks {
         this.attackLocation = attackLocation;
     }
 
-    public Integer getuuid() {
+    public String getuuid() {
         return uuid;
     }
 
-    public void setuuid(Integer uuid) {
+    public void setuuid(String uuid) {
         this.uuid = uuid;
     }
 
     public Attacks(){
     }
 
-    public Attacks(LocalDate attackDate, LocalTime attackTime, String attackLocation, Integer uuid) {
+    public Attacks(LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid) {
         this.attackDate = attackDate;
         this.attackTime = attackTime;
         this.attackLocation = attackLocation;
