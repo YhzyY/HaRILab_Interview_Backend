@@ -9,6 +9,7 @@ import com.lab.backend.model.Participants;
 import org.apache.commons.collections4.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,11 +73,8 @@ public class BackendController {
         return participantsRepository.findByUuid(uuid).getName();
     }
 
-
-
-
     @PostMapping("/newAttack")
-    public String createAttack(@RequestParam LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid){
+    public String createAttack(@RequestParam @DateTimeFormat(pattern = "EEE MMM dd yyyy")LocalDate attackDate, @DateTimeFormat(pattern = "HH:mm")LocalTime attackTime, String attackLocation, String uuid){
         attacksRepository.save(new Attacks(attackDate, attackTime, attackLocation, uuid));
         return "new attack is added";
     }
