@@ -74,11 +74,31 @@ public class BackendController {
         return participantsRepository.findByUuid(uuid).getName();
     }
 
+//    @PostMapping("/newAttack")
+//    public String createAttack(@RequestParam String attackDate, String attackTime, String attackLocation, String uuid){
+//        LocalDate.parse(attackDate, formatter);
+//        if (attacksRepository.findByAttackDateAndAttackTimeAndAttackLocationAndUuid(LocalDate.parse(attackDate, formatter), LocalTime.parse(attackTime), attackLocation, uuid) != null){
+//            attacksRepository.save(new Attacks(LocalDate.parse(attackDate, formatter), LocalTime.parse(attackTime), attackLocation, uuid));
+//            return "new attack is added";
+//        }else{
+////            return attacksRepository.findByAttackDateAndAttackTimeAndAttackLocationAndUuid(LocalDate.parse(attackDate, formatter), LocalTime.parse(attackTime), attackLocation, uuid).toString();
+//            return "duplicate attack";
+//        }
+//    }
+
     @PostMapping("/newAttack")
-    public String createAttack(@RequestParam String attackDate, String attackTime, String attackLocation, String uuid){
+    public String createAttack(@RequestParam String attackDate, String attackTime, String attackLocation, String uuid, String userDate){
         LocalDate.parse(attackDate, formatter);
-        attacksRepository.save(new Attacks(LocalDate.parse(attackDate, formatter), LocalTime.parse(attackTime), attackLocation, uuid));
-        return "new attack is added";
+        LocalDate.parse(userDate, formatter);
+        try {
+            if (attacksRepository.findByAttackDateAndAttackTimeAndAttackLocationAndUuid(LocalDate.parse(attackDate, formatter), LocalTime.parse(attackTime), attackLocation, uuid).getId() != null) {
+                return "duplicate attack";
+            }
+        }catch (Exception e){
+            attacksRepository.save(new Attacks(LocalDate.parse(attackDate, formatter), LocalTime.parse(attackTime), attackLocation, uuid, LocalDate.parse(userDate, formatter)));
+            return "new attack is added";
+        }
+        return "newAttack() error";
     }
 
 //    @PostMapping("/newAttack")
@@ -99,8 +119,8 @@ public class BackendController {
     }
 
     @GetMapping("/todayAttacks")
-    public Iterable<Attacks> showTodayAttacks(@RequestParam LocalDate today, String uuid){
-        return attacksRepository.findByAttackDateAndUuid(today, uuid);
+    public Iterable<Attacks> showTodayAttacks(@RequestParam String today, String uuid){
+        return attacksRepository.findByUserDateAndUuid(LocalDate.parse(today, formatter), uuid);
     }
 
     @DeleteMapping("/deleteAttack")
@@ -110,16 +130,17 @@ public class BackendController {
     }
 
     @GetMapping("/attackId")
-    public Integer getAttackId(@RequestParam LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid){
-        return attacksRepository.findByAttackDateAndAttackTimeAndAttackLocationAndUuid(attackDate, attackTime, attackLocation, uuid).getId();
+    public Integer getAttackId(@RequestParam String attackDate, String attackTime, String attackLocation, String uuid){
+        return attacksRepository.findByAttackDateAndAttackTimeAndAttackLocationAndUuid(LocalDate.parse(attackDate, formatter), LocalTime.parse(attackTime), attackLocation, uuid).getId();
     }
 
     @PutMapping("/modifyAttack")
-    public String modifyAttack(@RequestParam LocalDate attackDate, LocalTime attackTime, String attackLocation, Integer id){
+    public String modifyAttack(@RequestParam String attackDate, String attackTime, String attackLocation, Integer id, String userDate){
         Attacks attack = attacksRepository.findById(id).get();
-        attack.setAttackDate(attackDate);
-        attack.setAttackTime(attackTime);
+        attack.setAttackDate(LocalDate.parse(attackDate, formatter));
+        attack.setAttackTime(LocalTime.parse(attackTime));
         attack.setAttackLocation(attackLocation);
+        attack.setAttackDate(LocalDate.parse(userDate, formatter));
         attacksRepository.save(attack);
         return "attack modified";
     }
@@ -131,11 +152,11 @@ public class BackendController {
     }
 
     @GetMapping("/attacksReport")
-    public List<Integer> showAttacksReport(@RequestParam LocalDate day, String uuid){
+    public List<Integer> showAttacksReport(@RequestParam String day, String uuid){
         List numList = new ArrayList();
         LocalDate date;
         for(int i = 0; i < 7; i++){
-            date = day.minusDays(i);
+            date = LocalDate.parse(day, formatter).minusDays(i);
             numList.add(0, IterableUtils.size(attacksRepository.findByAttackDateAndUuid(date, uuid)));
         }
         return numList;

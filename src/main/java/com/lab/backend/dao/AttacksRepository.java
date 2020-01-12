@@ -16,5 +16,6 @@ public interface AttacksRepository extends CrudRepository<Attacks, Integer>, Pag
     public Optional<Attacks> findById(Integer id);
     public List<Attacks> findByUuid(String uuid, Sort and);
     public Iterable<Attacks> findByAttackDateAndUuid(LocalDate attackDate, String uuid);
+    public Iterable<Attacks> findByUserDateAndUuid(LocalDate userDate, String uuid);
     public Attacks findByAttackDateAndAttackTimeAndAttackLocationAndUuid(LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid);
 }

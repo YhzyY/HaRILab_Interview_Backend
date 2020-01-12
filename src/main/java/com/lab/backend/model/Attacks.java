@@ -13,6 +13,7 @@ public class Attacks {
     private LocalTime attackTime;
     private String attackLocation;
     private String uuid;
+    private LocalDate userDate;
 
     @Id
     @GeneratedValue
@@ -58,14 +59,23 @@ public class Attacks {
         this.uuid = uuid;
     }
 
+    public LocalDate getUserDate() {
+        return userDate;
+    }
+
+    public void setUserDate(LocalDate userDate) {
+        this.userDate = userDate;
+    }
+
     public Attacks(){
     }
 
-    public Attacks(LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid) {
+    public Attacks(LocalDate attackDate, LocalTime attackTime, String attackLocation, String uuid, LocalDate userDate) {
         this.attackDate = attackDate;
         this.attackTime = attackTime;
         this.attackLocation = attackLocation;
         this.uuid = uuid;
+        this.userDate = userDate;
     }
 
     @Override
