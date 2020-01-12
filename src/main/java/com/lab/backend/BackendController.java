@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class BackendController {
     @Autowired
     AttacksRepository attacksRepository;
 
-
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/M/d");
 //    private ParticipantsRepository participantsRepository;
 //    @Autowired
 //    public void setDependency(ParticipantsRepository participantsRepository){
@@ -74,10 +75,17 @@ public class BackendController {
     }
 
     @PostMapping("/newAttack")
-    public String createAttack(@RequestParam @DateTimeFormat(pattern = "EEE MMM dd yyyy")LocalDate attackDate, @DateTimeFormat(pattern = "HH:mm")LocalTime attackTime, String attackLocation, String uuid){
-        attacksRepository.save(new Attacks(attackDate, attackTime, attackLocation, uuid));
+    public String createAttack(@RequestParam String attackDate, String attackTime, String attackLocation, String uuid){
+        LocalDate.parse(attackDate, formatter);
+        attacksRepository.save(new Attacks(LocalDate.parse(attackDate, formatter), LocalTime.parse(attackTime), attackLocation, uuid));
         return "new attack is added";
     }
+
+//    @PostMapping("/newAttack")
+//    public String createAttack(@RequestParam @DateTimeFormat(pattern = "yyyy/M/d")LocalDate attackDate, @DateTimeFormat(pattern = "HH:mm")LocalTime attackTime, String attackLocation, String uuid){
+//        attacksRepository.save(new Attacks(attackDate, attackTime, attackLocation, uuid));
+//        return "new attack is added";
+//    }
 
     @GetMapping("/attacks")
     public Iterable<Attacks> showAttacks(){
