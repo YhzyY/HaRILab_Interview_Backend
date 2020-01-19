@@ -140,9 +140,20 @@ public class BackendController {
         attack.setAttackDate(LocalDate.parse(attackDate, formatter));
         attack.setAttackTime(LocalTime.parse(attackTime));
         attack.setAttackLocation(attackLocation);
-        attack.setAttackDate(LocalDate.parse(userDate, formatter));
+        attack.setUserDate(LocalDate.parse(userDate, formatter));
         attacksRepository.save(attack);
         return "attack modified";
+    }
+
+    @GetMapping("/userAttacksReport")
+    public List<Integer> showUserAttacksReport(@RequestParam String userday, String uuid){
+        List numsList = new ArrayList();
+        LocalDate userdate;
+        for(int i = 0; i < 7; i++){
+            userdate = LocalDate.parse(userday, formatter).minusDays(i);
+            numsList.add(0, IterableUtils.size(attacksRepository.findByUserDateAndUuid(userdate, uuid)));
+        }
+        return numsList;
     }
 
 //    tutorial: https://www.baeldung.com/spring-data-jpa-pagination-sorting
