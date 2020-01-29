@@ -181,8 +181,11 @@ public class BackendController {
         String tempUuid;
         LocalDate tempDate;
         LocalDate thisDay = LocalDate.now();
-        Iterable<Participants> allParticipants = participantsRepository.findAll();
-        for (Participants p : allParticipants){
+        List allParticipants = participantsRepository.findAll();
+        Participants p;
+//        finalList.add(allParticipants.size());
+        for (int j = 0; j < allParticipants.size(); j++){
+            p = (Participants) allParticipants.get(j);
             tempList.add(p.getName());
             tempUuid = p.getUuid();
             lastAttack = attacksRepository.findByUuid(tempUuid, Sort.by("attackDate").descending().and(Sort.by("attackTime"))).get(0);
@@ -194,13 +197,11 @@ public class BackendController {
             }
             tempList.add(lastAttack.getAttackDate());
             tempList.add(lastAttack.getAttackTime());
-            finalList.add(tempList);
+            finalList.add(new ArrayList(tempList));
             tempList.clear();
         }
         return finalList;
     }
-
-
 
 
 
