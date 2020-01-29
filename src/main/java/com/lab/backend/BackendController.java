@@ -186,6 +186,7 @@ public class BackendController {
 //        finalList.add(allParticipants.size());
         for (int j = 0; j < allParticipants.size(); j++){
             p = (Participants) allParticipants.get(j);
+            tempList.add(p.getUuid());
             tempList.add(p.getName());
             tempUuid = p.getUuid();
             lastAttack = attacksRepository.findByUuid(tempUuid, Sort.by("attackDate").descending().and(Sort.by("attackTime"))).get(0);
