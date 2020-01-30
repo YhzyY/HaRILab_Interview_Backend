@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 @RestController
@@ -173,8 +171,40 @@ public class BackendController {
         return numList;
     }
 
+//    @GetMapping("/PatientList")
+//    public List getPatientList(){
+//        List finalList = new ArrayList();
+//        List tempList = new ArrayList();
+//        Attacks lastAttack;
+//        String tempUuid;
+//        LocalDate tempDate;
+//        LocalDate thisDay = LocalDate.now();
+//        List allParticipants = participantsRepository.findAll();
+//        Participants p;
+////        finalList.add(allParticipants.size());
+//        for (int j = 0; j < allParticipants.size(); j++){
+//            p = (Participants) allParticipants.get(j);
+//            tempList.add(p.getUuid());
+//            tempList.add(p.getName());
+//            tempUuid = p.getUuid();
+//            lastAttack = attacksRepository.findByUuid(tempUuid, Sort.by("attackDate").descending().and(Sort.by("attackTime"))).get(0);
+//            tempDate = lastAttack.getAttackDate();
+//            if (tempDate.isBefore(thisDay.minusDays(2))){
+//                tempList.add("alert");
+//            }else{
+//                tempList.add("none");
+//            }
+//            tempList.add(lastAttack.getAttackDate());
+//            tempList.add(lastAttack.getAttackTime());
+//            finalList.add(new ArrayList(tempList));
+//            tempList.clear();
+//        }
+//        return finalList;
+//    }
+
     @GetMapping("/PatientList")
-    public List getPatientList(){
+    @ResponseBody
+    public Iterable<Map<String,Object>> getPatientList(){
         List finalList = new ArrayList();
         List tempList = new ArrayList();
         Attacks lastAttack;
@@ -184,22 +214,31 @@ public class BackendController {
         List allParticipants = participantsRepository.findAll();
         Participants p;
 //        finalList.add(allParticipants.size());
+        Map<String,Object> map=new HashMap<String,Object>();
         for (int j = 0; j < allParticipants.size(); j++){
             p = (Participants) allParticipants.get(j);
-            tempList.add(p.getUuid());
-            tempList.add(p.getName());
+            map.put("id", p.getUuid());
+            map.put("name", p.getName());
+//            tempList.add(p.getUuid());
+//            tempList.add(p.getName());
             tempUuid = p.getUuid();
             lastAttack = attacksRepository.findByUuid(tempUuid, Sort.by("attackDate").descending().and(Sort.by("attackTime"))).get(0);
             tempDate = lastAttack.getAttackDate();
             if (tempDate.isBefore(thisDay.minusDays(2))){
-                tempList.add("alert");
+//                tempList.add("alert");
+                map.put("alert", "alert");
             }else{
-                tempList.add("none");
+//                tempList.add("none");
+                map.put("alert", "none");
             }
-            tempList.add(lastAttack.getAttackDate());
-            tempList.add(lastAttack.getAttackTime());
-            finalList.add(new ArrayList(tempList));
-            tempList.clear();
+            map.put("AttackDate", lastAttack.getAttackDate());
+            map.put("AttackTime", lastAttack.getAttackTime());
+//            tempList.add(lastAttack.getAttackDate());
+//            tempList.add(lastAttack.getAttackTime());
+//            finalList.add(new ArrayList(tempList));
+            finalList.add(new HashMap(map));
+//            tempList.clear();
+            map.clear();
         }
         return finalList;
     }
