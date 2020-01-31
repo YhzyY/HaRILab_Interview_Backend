@@ -19,6 +19,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.StreamSupport;
 
+@CrossOrigin
 @RestController
 //@ImportResource("classpath:applicationContext.xml")
 public class BackendController {
